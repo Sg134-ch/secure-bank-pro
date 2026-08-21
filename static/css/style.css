@@ -1,0 +1,82 @@
+body {
+    background-color: #f4f7f6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+.navbar {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 1.5rem;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #f0f0f0;
+    border-radius: 12px 12px 0 0 !important;
+    font-weight: 600;
+    padding: 1.25rem 1.5rem;
+}
+
+.stat-card {
+    border-left: 4px solid #203a43;
+}
+
+.stat-card.success {
+    border-left-color: #28a745;
+}
+
+.stat-card.danger {
+    border-left-color: #dc3545;
+}
+
+.btn-primary {
+    background-color: #203a43;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    font-weight: 500;
+}
+
+.btn-primary:hover {
+    background-color: #0f2027;
+}
+
+.table th {
+    border-top: none;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.badge {
+    padding: 0.5em 0.75em;
+    border-radius: 6px;
+}
+
+.secure-badge {
+    color: #28a745;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

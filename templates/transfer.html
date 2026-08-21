@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white pb-0 border-0 pt-4 px-4 d-flex align-items-center">
+                <div class="bg-primary bg-opacity-10 text-primary p-3 rounded-circle me-3">
+                    <i class="fa-solid fa-money-bill-transfer fa-lg"></i>
+                </div>
+                <div>
+                    <h4 class="mb-0">Transfer Funds</h4>
+                    <p class="text-muted mb-0 small">Send money securely to other registered accounts.</p>
+                </div>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="">
+                    {{ form.hidden_tag() }} <!-- Security: CSRF Token -->
+                    
+                    <div class="alert alert-info d-flex align-items-center mb-4">
+                        <i class="fa-solid fa-wallet me-3 fa-2x"></i>
+                        <div>
+                            <strong>Available Balance:</strong><br>
+                            <span class="fs-5">₹{{ "%.2f"|format(current_user.account.balance) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.recipient_email.label(class="form-label fw-bold") }}
+                        <div class="input-group">
+                            <span class="input-group-text bg-light"><i class="fa-solid fa-at"></i></span>
+                            {{ form.recipient_email(class="form-control", placeholder="recipient@example.com") }}
+                        </div>
+                        {% for error in form.recipient_email.errors %}
+                            <span class="text-danger small"><i class="fa-solid fa-circle-exclamation me-1"></i>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-4">
+                        {{ form.amount.label(class="form-label fw-bold") }}
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-light"><i class="fa-solid fa-indian-rupee-sign"></i></span>
+                            {{ form.amount(class="form-control", placeholder="0.00") }}
+                        </div>
+                        {% for error in form.amount.errors %}
+                            <span class="text-danger small"><i class="fa-solid fa-circle-exclamation me-1"></i>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fa-solid fa-paper-plane me-2"></i> Send Securely
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <p class="text-center text-muted mt-3 small"><i class="fa-solid fa-lock me-1"></i> All transactions are heavily encrypted and logged for your protection.</p>
+    </div>
+</div>
+{% endblock %}

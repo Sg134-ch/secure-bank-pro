@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="fa-regular fa-hand-spock text-primary me-2"></i> Welcome back, {{ current_user.username }}</h2>
+    <div class="secure-badge">
+        <i class="fa-solid fa-lock"></i> Connection is encrypted & secure
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card stat-card p-3">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase mb-2">Available Balance</h6>
+                <h2 class="mb-0 fw-bold">₹{{ "%.2f"|format(account.balance) }}</h2>
+                <small class="text-muted">Account: ****{{ account.account_number[-4:] }}</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card success p-3">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase mb-2">Total In (Recent)</h6>
+                <h2 class="mb-0 text-success"><i class="fa-solid fa-arrow-trend-up me-2"></i>₹{{ "%.2f"|format(total_in) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card stat-card danger p-3">
+            <div class="card-body">
+                <h6 class="text-muted text-uppercase mb-2">Total Out (Recent)</h6>
+                <h2 class="mb-0 text-danger"><i class="fa-solid fa-arrow-trend-down me-2"></i>₹{{ "%.2f"|format(total_out) }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fa-solid fa-clock-rotate-left me-2"></i> Recent Activity</h5>
+                <a href="{{ url_for('main.download_statement') }}" class="btn btn-sm btn-outline-primary">
+                    <i class="fa-solid fa-file-csv me-1"></i> Download CSV
+                </a>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="bg-light">
+                            <tr>
+                                <th class="px-4 py-3">Date & Time</th>
+                                <th class="py-3">Description</th>
+                                <th class="py-3">Type</th>
+                                <th class="text-end px-4 py-3">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for t in transactions %}
+                            <tr>
+                                <td class="px-4 py-3 align-middle text-muted"><small>{{ t.timestamp.strftime('%b %d, %Y %I:%M %p') }}</small></td>
+                                <td class="py-3 align-middle fw-medium">{{ t.description }}</td>
+                                <td class="py-3 align-middle">
+                                    {% if 'IN' in t.transaction_type or t.transaction_type == 'DEPOSIT' %}
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">{{ t.transaction_type }}</span>
+                                    {% elif 'BILL' in t.transaction_type %}
+                                        <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 text-dark">{{ t.transaction_type }}</span>
+                                    {% else %}
+                                        <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">{{ t.transaction_type }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end px-4 py-3 align-middle fw-bold {% if t.amount > 0 %}text-success{% else %}text-dark{% endif %}">
+                                    {% if t.amount > 0 %}+{% endif %}₹{{ "%.2f"|format(t.amount) }}
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-receipt fa-3x mb-3 text-light"></i>
+                                    <p>No recent transactions found.</p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

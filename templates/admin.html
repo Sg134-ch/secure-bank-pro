@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h3>Admin Panel - System Users</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Account Balance</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for u in users %}
+                        <tr>
+                            <td>{{ u.id }}</td>
+                            <td>{{ u.username }}</td>
+                            <td>{{ u.email }}</td>
+                            <td>{{ u.role }}</td>
+                            <td>₹{{ "%.2f"|format(u.account.balance) if u.account else 'N/A' }}</td>
+                            <td>
+                                {% if u.role != 'admin' %}
+                                <form action="{{ url_for('main.admin_deposit', user_id=u.id) }}" method="POST" class="d-inline">
+                                    {{ form.hidden_tag() }}
+                                    <div class="input-group input-group-sm" style="max-width: 200px;">
+                                        {{ form.amount(class="form-control", placeholder="Amount") }}
+                                        {{ form.submit(class="btn btn-outline-success") }}
+                                    </div>
+                                </form>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
