@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: secure-bank-pro
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ENCRYPTION_KEY
+        value: 2cI63bH6aXpGk1_8gJ6fL4d_Z-QeYwT7kV1lA2hG5xE=

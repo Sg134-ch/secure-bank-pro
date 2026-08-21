@@ -47,8 +47,24 @@ def create_app(config_class=Config):
         response.headers['X-Frame-Options'] = 'SAMEORIGIN'
         response.headers['X-Content-Type-Options'] = 'nosniff'
         response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
-        response.headers['Content-Security-Policy'] = "default-src 'self'; style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; script-src 'self' https://cdn.jsdelivr.net"
+        response.headers['Content-Security-Policy'] = "default-src 'self'; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; script-src 'self' https://cdn.jsdelivr.net"
         return response
+
+    # Auto-initialize database on startup (Great for Render ephemeral disks)
+    with app.app_context():
+        db.create_all()
+        # Check if admin exists, if not, seed the database
+        if not User.query.filter_by(email='admin@bank.com').first():
+            from init_db import initialize_database
+            # We skip dropping tables here, just create
+            admin = User(username='admin', email='admin@bank.com', role='admin')
+            admin.set_password('admin123')
+            db.session.add(admin)
+            db.session.commit()
+            
+            admin_account = Account(user_id=admin.id, account_number='100000001', balance=1000000.0)
+            db.session.add(admin_account)
+            db.session.commit()
 
     return app
 

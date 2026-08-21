@@ -65,13 +65,17 @@ This application is built with security first:
    ```
    Navigate to `http://127.0.0.1:5000` in your web browser.
 
-## Deployment (Render / Heroku)
+## Deployment (One-Click)
 
-This application includes a `Procfile` and uses `gunicorn` for production deployment.
+I have configured a `render.yaml` file so you can instantly deploy this to the cloud for free with zero manual configuration.
 
-1. Create a new Web Service on Render and connect your GitHub repository.
-2. Build Command: `pip install -r requirements.txt`
-3. Start Command: `gunicorn app:app`
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
+1. Click the button above.
+2. Connect your GitHub account.
+3. Render will automatically read the `render.yaml`, generate a secure `SECRET_KEY`, install everything, and give you a live URL!
+
+*(Note: Because Render's free tier uses ephemeral disks, I updated the code so that if Render restarts and resets the SQLite database, it will automatically recreate the Admin account (`admin@bank.com`) instantly so your app never breaks!)*
 4. Make sure to add `SECRET_KEY` and `ENCRYPTION_KEY` into your Render Environment Variables!
 
 ## Default Test Accounts
