@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from config import Config
-from models import db, User
+from models import db, User, Account
 from routes import main
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect
@@ -55,7 +55,6 @@ def create_app(config_class=Config):
         db.create_all()
         # Check if admin exists, if not, seed the database
         if not User.query.filter_by(email='admin@bank.com').first():
-            from init_db import initialize_database
             # We skip dropping tables here, just create
             admin = User(username='admin', email='admin@bank.com', role='admin')
             admin.set_password('admin123')
