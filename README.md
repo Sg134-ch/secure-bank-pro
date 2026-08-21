@@ -65,18 +65,56 @@ This application is built with security first:
    ```
    Navigate to `http://127.0.0.1:5000` in your web browser.
 
-## Deployment (One-Click)
+## Deployment (Free & No Credit Card Required)
 
-I have configured a `render.yaml` file so you can instantly deploy this to the cloud for free with zero manual configuration.
+Since this application uses SQLite (which requires persistent storage), the best place to host it for free without a credit card is **PythonAnywhere**.
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+### Step 1: Push Code to GitHub
+Ensure all your project files are pushed to a public or private GitHub repository.
 
-1. Click the button above.
-2. Connect your GitHub account.
-3. Render will automatically read the `render.yaml`, generate a secure `SECRET_KEY`, install everything, and give you a live URL!
+### Step 2: Set up PythonAnywhere
+1. Create a free "Beginner" account on [PythonAnywhere](https://www.pythonanywhere.com/).
+2. From the dashboard, open a new **Bash Console**.
+3. Clone your repository:
+   ```bash
+   git clone https://github.com/YOUR_USERNAME/secure-bank-pro.git
+   ```
+4. Install dependencies:
+   ```bash
+   cd secure-bank-pro
+   pip3.10 install --user -r requirements.txt
+   ```
 
-*(Note: Because Render's free tier uses ephemeral disks, I updated the code so that if Render restarts and resets the SQLite database, it will automatically recreate the Admin account (`admin@bank.com`) instantly so your app never breaks!)*
-4. Make sure to add `SECRET_KEY` and `ENCRYPTION_KEY` into your Render Environment Variables!
+### Step 3: Create the Web App
+1. Go to the **Web** tab in PythonAnywhere and click **Add a new web app**.
+2. Skip the domain name screen by clicking Next.
+3. Select **Manual Configuration** (Do NOT select Flask) and choose **Python 3.10**.
+4. Once created, scroll down to the **Code** section:
+   - Set **Source code** to: `/home/YOUR_USERNAME/secure-bank-pro`
+   - Set **Working directory** to: `/home/YOUR_USERNAME/secure-bank-pro`
+
+### Step 4: Configure WSGI
+1. In the Web tab, click the link under **WSGI configuration file**.
+2. Delete everything inside the file and paste this:
+
+```python
+import sys
+import os
+
+path = '/home/YOUR_USERNAME/secure-bank-pro'
+if path not in sys.path:
+    sys.path.insert(0, path)
+
+# Secure Environment Variables
+os.environ['SECRET_KEY'] = 'generate-a-secure-random-key'
+os.environ['ENCRYPTION_KEY'] = '2cI63bH6aXpGk1_8gJ6fL4d_Z-QeYwT7kV1lA2hG5xE='
+
+from app import create_app
+application = create_app()
+```
+*(Make sure to replace `YOUR_USERNAME` with your PythonAnywhere username!)*
+
+3. Click **Save** and then hit the big green **Reload** button on the Web tab. Your app is now live!
 
 ## Default Test Accounts
 If initialized via `init_db.py`:
